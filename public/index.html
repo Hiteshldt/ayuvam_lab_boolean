@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Boo-lean — is this job real, or just haunting LinkedIn?</title>
+<meta name="description" content="Paste a job description. Boo-lean investigates whether anyone is actually hiring, or if it's a ghost job collecting CVs.">
+<meta property="og:title" content="Boo-lean — paranormal job investigations">
+<meta property="og:description" content="Is anyone actually hiring, or is this post just haunting LinkedIn?">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#F4F4F0">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><path d='M12 58V28a20 20 0 0 1 40 0v30l-7-5-6 5-7-5-6 5-7-5z' fill='%23b7f0d4'/><circle cx='25' cy='28' r='4' fill='%232d2846'/><circle cx='39' cy='28' r='4' fill='%232d2846'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+} }
+</script>
+<style>
+:root{
+  --bg:#efeaf8; --panel:#f7f4fc; --panel2:#fdfcff; --panel3:#e9e3f7; --ink:#262140; --mute:#726c8e; --line:#2d284612; --line2:#2d284622;
+  --ecto:#2f9f6e; --ecto-soft:#c9f3df; --blood:#ee6a8c; --blood-soft:#ffe0e8; --amber:#d9913a; --amber-soft:#fff0d9; --lav:#6f5bd6; --ease:cubic-bezier(.2,.9,.25,1);
+  --shadow:0 18px 40px -22px #4a3d8a55;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg);color:var(--ink);font-family:'Space Grotesk',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+body{display:grid;grid-template-columns:minmax(400px,480px) 1fr;height:100vh;overflow:hidden}
+button,input,textarea{font:inherit;color:inherit}
+button{border:0;background:none;cursor:pointer}
+svg.i{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* panel */
+.panel{position:relative;z-index:2;overflow:auto;background:linear-gradient(180deg,#f8f5fd,#ebe5f7);border-right:1px solid #fff;box-shadow:12px 0 40px -30px #4a3d8a66;padding:26px 26px 40px;scrollbar-width:thin;scroll-behavior:smooth}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:46px;height:46px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(145deg,#d6f7e6,#a8ebcb);color:var(--ink);box-shadow:0 10px 24px -10px #4cc38f99,inset 0 1px 0 #fff}
+.logo svg{width:26px;height:26px}
+.brand h1{font-family:'Space Grotesk',sans-serif;font-style:italic;font-weight:800;font-size:40px;letter-spacing:-1px;line-height:.95}
+.brand h1 span{color:var(--ecto)}
+.brand small{display:block;font:600 10.5px 'IBM Plex Mono',monospace;letter-spacing:.18em;text-transform:uppercase;color:var(--mute);margin-top:4px}
+.lede{margin-top:14px;color:var(--mute);font-size:15px;line-height:1.55}
+.lede b{color:var(--ink);font-weight:600}
+
+.box{margin-top:20px;border-radius:22px;background:var(--panel2);border:1px solid var(--line);box-shadow:var(--shadow);overflow:hidden;transition:border-color .2s,box-shadow .2s}
+.box:focus-within{border-color:#4cc38f66;box-shadow:0 0 0 4px #4cc38f1f,var(--shadow)}
+.box-head{display:flex;justify-content:space-between;align-items:center;padding:12px 14px 0 16px}
+.box-head span{font:600 11px 'IBM Plex Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+.mini{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:9px;font-size:12.5px;font-weight:600;color:var(--mute);transition:background .15s,color .15s}
+.mini:hover{background:var(--panel3);color:var(--ink)}
+.mini svg{width:14px;height:14px}
+textarea{display:block;width:100%;min-height:200px;max-height:46vh;resize:vertical;padding:10px 16px 14px;background:none;border:0;color:var(--ink);font:15px/1.55 'Space Grotesk',sans-serif;outline:none}
+textarea::placeholder{color:#a9a3c4}
+.box-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 12px 12px 16px;border-top:1px solid var(--line);background:#fcfbff;font-size:12px;color:var(--mute)}
+.samples{display:flex;gap:6px}
+.sample{display:inline-flex;align-items:center;gap:6px;padding:6px 11px;border-radius:99px;border:1px solid var(--line2);font-size:12px;font-weight:600;color:var(--ink);background:#fff;transition:background .15s,transform .15s}
+.sample:hover{background:var(--panel3);transform:translateY(-1px)}
+.sample svg{width:14px;height:14px}
+#sGhost svg{color:var(--lav)}#sAlive svg{color:var(--blood)}
+
+.q{margin:18px 0 8px;font:600 11px 'IBM Plex Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button{padding:8px 12px;border-radius:12px;border:1px solid var(--line2);background:#fff;font-size:13px;font-weight:600;color:#5d5878;transition:all .15s}
+.seg button:hover{background:var(--panel3)}
+.seg button[aria-pressed=true]{background:var(--lav);color:#fff;border-color:transparent;box-shadow:0 8px 18px -10px var(--lav)}
+.toggle{display:flex;align-items:center;gap:12px;margin-top:12px;padding:12px 14px;border-radius:16px;background:#fff;border:1px solid var(--line);cursor:pointer;font-size:14px;color:#5d5878;user-select:none}
+.toggle input{display:none}
+.toggle .sw{width:40px;height:24px;border-radius:99px;background:#2d28461a;position:relative;flex:none;transition:background .2s}
+.toggle .sw::after{content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 3px #0003;transition:transform .25s var(--ease)}
+.toggle input:checked+.sw{background:var(--ecto)}
+.toggle input:checked+.sw::after{transform:translateX(16px)}
+.go{margin-top:18px;width:100%;padding:17px;border-radius:18px;background:linear-gradient(135deg,#7fdcb3,#6cc6c2 50%,#9d92f0);color:var(--ink);font-weight:700;font-size:17px;display:flex;align-items:center;justify-content:center;gap:10px;transition:transform .15s,filter .2s,box-shadow .3s;box-shadow:0 14px 34px -14px #6fcfb0,inset 0 1px 0 #fff8}
+.go:hover{filter:brightness(1.04) saturate(1.05);box-shadow:0 18px 44px -14px #6fcfb0}
+.go:active{transform:scale(.985)}
+.go[disabled]{filter:saturate(.4);cursor:wait;box-shadow:none}
+.go kbd{font:600 11px 'IBM Plex Mono',monospace;padding:2px 6px;border-radius:6px;background:#ffffff80}
+#ts{margin-top:10px}
+.err{margin-top:10px;font-size:14px;color:var(--blood);min-height:0}
+.err:empty{display:none}
+.shake{animation:shake .4s}
+@keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+
+/* case file */
+.results{margin-top:30px;display:none}
+.results.show{display:block}
+.results>*{opacity:0;transform:translateY(12px);animation:in .6s var(--ease) forwards}
+.results>*:nth-child(2){animation-delay:.08s}.results>*:nth-child(3){animation-delay:.16s}.results>*:nth-child(4){animation-delay:.24s}.results>*:nth-child(5){animation-delay:.32s}.results>*:nth-child(6){animation-delay:.4s}
+@keyframes in{to{opacity:1;transform:none}}
+.case{position:relative;border-radius:24px;padding:20px;background:linear-gradient(160deg,#fff,#f3eeff);border:1px solid #fff;box-shadow:var(--shadow);overflow:hidden}
+.case::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,#8f7fe80f 0 1px,transparent 1px 28px);pointer-events:none}
+.case-no{font:600 11px 'IBM Plex Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+.case-title{margin-top:6px;font-size:15px;font-weight:600;color:#5d5878;padding-right:120px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.score{display:flex;align-items:baseline;gap:6px;margin-top:14px}
+.score b{font:700 64px/0.9 'IBM Plex Mono',monospace;letter-spacing:-2px}
+.score span{font:600 16px 'IBM Plex Mono',monospace;color:var(--mute)}
+.tier-line{margin-top:8px;font-size:15px;line-height:1.45;color:#4a4566}
+.stamp{position:absolute;top:22px;right:18px;padding:8px 12px;border:3px solid currentColor;border-radius:10px;font:700 13px 'IBM Plex Mono',monospace;letter-spacing:.1em;text-transform:uppercase;transform:rotate(8deg) scale(1.6);opacity:0;animation:stamp .5s .5s var(--ease) forwards;text-align:center;line-height:1.2;max-width:130px;background:#ffffffb0}
+@keyframes stamp{to{transform:rotate(8deg) scale(1);opacity:.95}}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.split div{padding:10px 12px;border-radius:14px;background:#fff;border:1px solid var(--line)}
+.split small{display:block;font-size:11.5px;color:var(--mute)}
+.split b{font:700 18px 'IBM Plex Mono',monospace}
+.split .g b{color:var(--blood)}.split .l b{color:var(--ecto)}
+.medium{margin-top:14px;padding:18px;border-radius:22px;background:radial-gradient(120% 140% at 0% 0%,#c9f3df,transparent 60%),#fff;border:1px solid #4cc38f33;box-shadow:var(--shadow)}
+.medium .h{display:flex;align-items:center;gap:8px;font:600 11px 'IBM Plex Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:#2f9e6e}
+.medium .v{margin-top:8px;font-family:'Space Grotesk',sans-serif;font-style:italic;font-size:23px;font-weight:700;line-height:1.2}
+.medium p{margin-top:8px;font-size:15px;line-height:1.55;color:#4a4566}
+.advice{display:flex;gap:10px;align-items:flex-start;margin-top:12px;padding:12px 14px;border-radius:14px;background:var(--amber-soft);color:#9a5d17;font-size:14px;font-weight:600;line-height:1.45}
+.note{margin-top:12px;font-size:13px;color:var(--mute);line-height:1.5}
+.tabs{display:flex;gap:4px;margin-top:22px;padding:4px;border-radius:16px;background:#ece6ff}
+.tabs button{flex:1;padding:9px 6px;border-radius:12px;font-size:13px;font-weight:600;color:var(--mute);transition:all .2s}
+.tabs button[aria-selected=true]{background:#fff;color:var(--ink);box-shadow:0 4px 12px -6px #4a3d8a66}
+.tabs em{font-style:normal;font:600 11px 'IBM Plex Mono',monospace;margin-left:4px;opacity:.7}
+.pane{margin-top:12px;display:none}
+.pane.on{display:grid;gap:8px;animation:in .4s var(--ease) forwards}
+.e{padding:13px 14px;border-radius:18px;background:#fff;border:1px solid var(--line);display:grid;grid-template-columns:30px 1fr auto;gap:12px;align-items:start}
+.e .ic{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;background:#ece6ff;color:var(--lav)}
+.e.life .ic{background:var(--blood-soft);color:var(--blood)}
+.e.ai .ic{background:var(--amber-soft);color:var(--amber)}
+.e .ic svg{width:16px;height:16px}
+.e .h{font-weight:600;font-size:14px}
+.e .w{font-size:13px;color:var(--mute);margin-top:2px;line-height:1.45}
+.e q{display:block;margin-top:7px;padding-left:10px;border-left:2px solid #8f7fe855;font-size:13px;color:#5d5878;font-style:italic;quotes:none}
+.e .pts{font:600 12px 'IBM Plex Mono',monospace;color:var(--lav);padding-top:6px}
+.e.life .pts{color:var(--blood)}
+.jd{padding:16px;border-radius:18px;background:#fff;border:1px solid var(--line);font-size:14px;line-height:1.7;white-space:pre-wrap;color:#5d5878;max-height:420px;overflow:auto}
+mark{background:#ece6ff;color:#4a3fa8;border-bottom:2px solid var(--lav);border-radius:3px;padding:0 2px;cursor:help}
+mark.life{background:var(--blood-soft);color:#b63b62;border-color:var(--blood)}
+.empty{padding:14px;color:var(--mute);font-size:14px;text-align:center}
+.share{margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.share button{display:flex;align-items:center;justify-content:center;gap:8px;padding:13px;border-radius:16px;border:1px solid var(--line2);background:#fff;font-weight:600;font-size:14px;transition:background .15s,transform .15s}
+.share button:hover{background:var(--panel3);transform:translateY(-1px)}
+.foot{margin-top:28px;font-size:12px;color:#827c9ecc;line-height:1.6}
+.foot a,.foot button{color:inherit;text-decoration:underline;text-underline-offset:2px;font-size:inherit}
+
+/* stage */
+.stage{position:relative;overflow:hidden;background:#7d70b8}
+#c{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hud{position:absolute;left:0;right:0;pointer-events:none;display:flex;justify-content:center}
+.tier{top:24px;opacity:0;transform:translateY(-8px);transition:.6s var(--ease)}
+.tier.show{opacity:1;transform:none}
+.tier div{padding:9px 16px;border-radius:999px;background:#ffffffd9;backdrop-filter:blur(10px);box-shadow:var(--shadow);font:600 12.5px 'IBM Plex Mono',monospace;letter-spacing:.1em;text-transform:uppercase;display:flex;align-items:center;gap:10px}
+.tier i{width:8px;height:8px;border-radius:50%}
+.seance{top:40%;flex-direction:column;align-items:center;gap:10px;opacity:0;transition:opacity .4s}
+.seance.show{opacity:1}
+.seance p{font-family:'Space Grotesk',sans-serif;font-style:italic;font-size:26px;color:#fff;text-shadow:0 0 24px #6b5fd0,0 2px 10px #4a3d8a88;text-align:center;padding:0 20px}
+.seance span{font:600 11px 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#fff;background:#4a3d8a55;padding:4px 10px;border-radius:99px;text-transform:uppercase}
+.emf{bottom:22px}
+.meter{display:flex;align-items:center;gap:16px;padding:14px 18px;border-radius:22px;background:linear-gradient(180deg,#fffdf9,#efe9ff);border:1px solid #fff;box-shadow:0 20px 50px -16px #4a3d8a88,inset 0 1px 0 #fff}
+.leds{display:flex;gap:5px;align-items:flex-end;height:34px}
+.leds i{width:12px;border-radius:4px;background:#2d284614;transition:background .12s,box-shadow .12s}
+.readout{min-width:84px;text-align:right}
+.readout b{display:block;font:700 30px/1 'IBM Plex Mono',monospace;letter-spacing:-1px}
+.readout span{font:600 9.5px 'IBM Plex Mono',monospace;letter-spacing:.2em;color:var(--mute)}
+.scale{display:flex;justify-content:space-between;font:600 9px 'IBM Plex Mono',monospace;letter-spacing:.14em;color:#fff;text-shadow:0 1px 4px #4a3d8a;margin-top:6px}
+.hint{position:absolute;left:18px;top:26px;font-size:12px;color:#ffffffcc;text-shadow:0 1px 6px #4a3d8a88;pointer-events:none}
+.stage-tools{position:absolute;right:18px;top:18px;display:flex;gap:8px;z-index:3}
+.st-btn{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;background:#ffffffd9;backdrop-filter:blur(10px);box-shadow:var(--shadow);color:var(--ink);transition:transform .15s}
+.st-btn:hover{transform:translateY(-1px)}
+.st-btn.me-ava{border-radius:50%}
+.st-btn.me-music.on{color:var(--lav)}
+
+.modal{position:fixed;inset:0;z-index:20;display:grid;place-items:center;background:#3c305066;backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:.3s;padding:16px}
+.modal.open{opacity:1;pointer-events:auto}
+.sheet{width:min(600px,100%);max-height:88vh;overflow:auto;background:#fff;border-radius:28px;padding:28px;box-shadow:0 40px 90px -30px #3b2d5a88;transform:translateY(12px);transition:transform .4s var(--ease)}
+.modal.open .sheet{transform:none}
+.sheet h2{font-family:'Space Grotesk',sans-serif;font-style:italic;font-weight:800;font-size:32px;line-height:1.1}
+.sheet h4{margin:20px 0 6px;font:600 11px 'IBM Plex Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+.sheet p,.sheet li{font-size:15px;line-height:1.6;color:#4a4566}
+.sheet ul{padding-left:18px}
+.close{float:right;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;color:var(--mute);background:var(--panel3)}
+#toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);z-index:40;padding:12px 18px;border-radius:16px;background:var(--ink);color:#fff;font-weight:700;opacity:0;transition:.3s var(--ease);pointer-events:none}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+
+.me-intro{--me-accent:linear-gradient(135deg,#7fdcb3,#6cc6c2 50%,#9d92f0);--me-accent-ink:#2d2846;--me-ink:#2d2846;--me-mute:#827c9e;--me-soft:#f3eeff;--me-display:italic 800 40px/1 'Space Grotesk',sans-serif;--me-font:'Space Grotesk',sans-serif;--me-btn-shadow:0 14px 34px -14px #6fcfb0}
+.me-intro .me-go{background:linear-gradient(135deg,#7fdcb3,#6cc6c2 50%,#9d92f0)}
+.me-intro h2 span{color:var(--ecto)}
+.me-steps li:nth-child(2){background:#eafaf2}.me-steps li:nth-child(3){background:#fff0f4}
+
+@media (max-width:900px){
+  body{grid-template-columns:1fr;grid-template-rows:44vh 1fr;height:100dvh}
+  .stage{grid-row:1}
+  .panel{grid-row:2;border-right:0;border-top:1px solid #fff;padding:22px 16px 40px}
+  .brand h1{font-size:34px}
+  .emf{bottom:6px;transform:scale(.78);transform-origin:bottom center}.meter{padding:10px 12px;gap:10px}.leds{height:26px}.leds i{width:9px}.readout b{font-size:22px}
+  .tier{top:12px}.hint{display:none}
+  .stage-tools{top:10px;right:10px;gap:6px}.st-btn{width:38px;height:38px}
+  .tier{justify-content:flex-start;padding-left:12px}
+  .seance p{font-size:20px}
+}
+
+/* ===== Gumroad-style theme ===== */
+:root{
+  --bg:#F4F4F0; --panel:#F4F4F0; --panel2:#fff; --panel3:#FFE6FA; --ink:#000; --mute:#555; --line:#000; --line2:#000;
+  --pink:#FF90E8; --yellow:#FFC900; --blue:#90A8ED; --teal:#23A094; --ecto:#23A094; --blood:#E0457B; --amber:#b88600; --lav:#000;
+  --shadow:4px 4px 0 #000;
+}
+body{letter-spacing:-.01em}
+.panel{background:#F4F4F0;border-right:2px solid #000;box-shadow:none}
+.logo{background:var(--pink);border:2px solid #000;border-radius:10px;box-shadow:3px 3px 0 #000;transform:rotate(-4deg)}
+.brand h1{font-style:normal;font-weight:700;letter-spacing:-.05em;font-size:42px}
+.brand h1 span{color:var(--pink);-webkit-text-stroke:1.5px #000}
+.brand small{color:#000}
+.lede{color:#333}
+.box{border:2px solid #000;border-radius:12px;box-shadow:none}
+.box:focus-within{border-color:#000;box-shadow:4px 4px 0 #000}
+.box-head span,.q,.case-no{color:#000}
+.box-foot{background:#fff;border-top:2px solid #000}
+.mini:hover{background:#F4F4F0}
+.sample{border:1.5px solid #000;border-radius:6px}
+.sample:hover{background:var(--yellow);transform:none}
+#sGhost svg,#sAlive svg{color:#000}
+.seg button{border:1.5px solid #000;border-radius:6px;color:#000}
+.seg button:hover{background:#fff}
+.seg button[aria-pressed=true]{background:var(--pink);color:#000;box-shadow:2px 2px 0 #000;border-color:#000}
+.toggle{border:2px solid #000;border-radius:10px;color:#000}
+.toggle .sw{border:1.5px solid #000;background:#fff}
+.toggle .sw::after{top:2px;left:2px;background:#000;box-shadow:none}
+.toggle input:checked+.sw{background:var(--pink)}
+.go{background:var(--pink);color:#000;border:2px solid #000;border-radius:8px;box-shadow:4px 4px 0 #000;transition:transform .12s,box-shadow .12s}
+.go:hover{filter:none;transform:translate(-2px,-2px);box-shadow:6px 6px 0 #000}
+.go:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #000}
+.go kbd{background:#fff;border:1px solid #000}
+.case{background:#fff;border:2px solid #000;border-radius:12px;box-shadow:6px 6px 0 #000}
+.case::before{background:repeating-linear-gradient(0deg,#0000000a 0 1px,transparent 1px 28px)}
+.case-title{color:#333}
+.stamp{background:#fff;border-radius:6px}
+.split div{border:1.5px solid #000;border-radius:8px;background:#F4F4F0}
+.medium{background:#E4EBFD;border:2px solid #000;border-radius:12px;box-shadow:4px 4px 0 #000}
+.medium .h{color:#000}
+.medium .v{font-style:normal;letter-spacing:-.03em}
+.medium p,.tier-line{color:#222}
+.advice{background:var(--yellow);color:#000;border:1.5px solid #000;border-radius:8px}
+.tabs{background:#fff;border:2px solid #000;border-radius:10px}
+.tabs button{border-radius:6px;color:#555}
+.tabs button[aria-selected=true]{background:var(--pink);color:#000;box-shadow:inset 0 0 0 1.5px #000}
+.e{border:1.5px solid #000;border-radius:10px}
+.e .ic{background:#FFE6FA;color:#000;border:1px solid #000;border-radius:6px}
+.e.life .ic{background:#D3F2EA;color:#000}
+.e.ai .ic{background:#FFF4C2;color:#000}
+.e .pts{color:#000}.e.life .pts{color:var(--teal)}
+.e q{border-left-color:var(--pink);color:#333}
+.jd{border:2px solid #000;border-radius:10px;color:#333}
+mark{background:#FFE6FA;color:#000;border-bottom:2px solid #E0457B}
+mark.life{background:#D3F2EA;color:#000;border-color:var(--teal)}
+.share button{border:2px solid #000;border-radius:8px;transition:transform .12s,box-shadow .12s}
+.share button:hover{background:var(--yellow);transform:translate(-2px,-2px);box-shadow:4px 4px 0 #000}
+.foot{color:#555}
+.tier div{background:#fff;border:2px solid #000;border-radius:8px;box-shadow:3px 3px 0 #000;backdrop-filter:none}
+.seance span{background:#000;color:#fff;border-radius:6px}
+.seance p{font-style:normal;font-weight:700;letter-spacing:-.03em}
+.meter{background:#fff;border:2px solid #000;border-radius:12px;box-shadow:4px 4px 0 #000}
+.leds i{border:1px solid #0003}
+.readout span{color:#000}
+.scale{color:#fff;text-shadow:0 1px 3px #000}
+.st-btn{background:#fff;border:2px solid #000;border-radius:8px;box-shadow:3px 3px 0 #000;backdrop-filter:none}
+.st-btn.me-music.on{background:var(--pink);color:#000}
+.sheet{border:2px solid #000;border-radius:14px;box-shadow:8px 8px 0 #000}
+.sheet h2{font-style:normal;letter-spacing:-.03em}
+.close{background:#fff;border:2px solid #000;border-radius:8px;color:#000}
+.modal{background:#0006;backdrop-filter:blur(4px)}
+#toast{background:#000;color:#fff;border-radius:8px;box-shadow:4px 4px 0 var(--pink)}
+.me-intro .me-go{background:#FF90E8}
+.me-intro h2 span{color:#FF90E8;-webkit-text-stroke:1.5px #000}
+.me-steps li:nth-child(1){background:#FFE6FA}.me-steps li:nth-child(2){background:#FFF4C2}.me-steps li:nth-child(3){background:#E4EBFD}
+
+/* ===== colour blocks ===== */
+.panel{background:#90A8ED}
+.lede,.foot{color:#111}
+.brand small{color:#111}
+.box{box-shadow:4px 4px 0 #000}
+.box-head{background:#FFC900;border-bottom:2px solid #000;padding-bottom:10px}
+.box-head span{color:#000}
+.box-head .mini{color:#000}.box-head .mini:hover{background:#fff}
+.q{color:#000}
+.seg button{background:#fff}
+.seg button[aria-pressed=true]{background:#FFC900}
+.toggle{background:#fff}
+.go{background:#FF90E8}
+.case{background:#fff}
+.case .split .g{background:#FFE6FA}.case .split .l{background:#D3F2EA}
+.medium{background:#FFC900}
+.advice{background:#fff}
+.tabs button[aria-selected=true]{background:#FFC900}
+.e{background:#fff}
+.share button{background:#fff}
+.share button:first-child{background:#FF90E8}
+.foot a,.foot button{color:#000}
+.tier div{background:#FFC900}
+.meter{background:#fff}
+.st-btn{background:#FFC900}
+.st-btn.me-music.on{background:#FF90E8}
+#toast{background:#FF90E8;color:#000;border:2px solid #000;box-shadow:4px 4px 0 #000}
+@media (max-width:900px){.panel{border-top:2px solid #000}}
+</style>
+</head>
+<body>
+<main class="panel" id="panel">
+  <div class="brand">
+    <div class="logo"><svg class="i" viewBox="0 0 24 24"><path d="M5 21V11a7 7 0 0 1 14 0v10l-2.3-1.6L14.3 21 12 19.4 9.7 21l-2.4-1.6z"/><circle cx="9.5" cy="11" r="1" fill="currentColor"/><circle cx="14.5" cy="11" r="1" fill="currentColor"/></svg></div>
+    <div><h1>Boo<span>·</span>lean</h1><small>Paranormal job investigations</small></div>
+  </div>
+  <p class="lede">Paste a job post. We'll investigate whether <b>anyone is actually hiring</b>, or whether it's just haunting LinkedIn and collecting CVs.</p>
+
+  <div class="box">
+    <div class="box-head"><span>Exhibit A · the job post</span><span style="display:flex;gap:2px"><button class="mini" id="paste"><svg class="i" viewBox="0 0 24 24"><rect x="8" y="3" width="8" height="4" rx="1"/><path d="M16 5h2a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2"/></svg>Paste</button><button class="mini" id="clear"><svg class="i" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>Clear</button></span></div>
+    <textarea id="jd" placeholder="Paste the whole thing, including the boring bits. Ghosts hide in the details." spellcheck="false"></textarea>
+    <div class="box-foot"><span id="count">0 characters</span><span class="samples"><button class="sample" id="sGhost"><svg class="i" viewBox="0 0 24 24"><path d="M5 21V11a7 7 0 0 1 14 0v10l-2.3-1.6L14.3 21 12 19.4 9.7 21l-2.4-1.6z"/></svg>Haunted</button><button class="sample" id="sAlive"><svg class="i" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>Alive</button></span></div>
+  </div>
+
+  <div class="q">When was it posted?</div>
+  <div class="seg" id="age"></div>
+  <label class="toggle"><input type="checkbox" id="repost"><span class="sw"></span>I've seen this exact post before</label>
+
+  <button class="go" id="go"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><span>Investigate</span><kbd>⌘ ↵</kbd></button>
+  <div id="ts"></div>
+  <div class="err" id="err" role="alert"></div>
+
+  <section class="results" id="results" aria-live="polite">
+    <div class="case">
+      <div class="case-no" id="caseNo">Case file</div>
+      <div class="case-title" id="caseTitle"></div>
+      <div class="stamp" id="stamp"></div>
+      <div class="score"><b id="rScore">0</b><span>/ 100 ghost</span></div>
+      <div class="tier-line" id="rLine"></div>
+      <div class="split"><div class="g"><small>Evidence of haunting</small><b id="gSum">+0</b></div><div class="l"><small>Signs of life</small><b id="lSum">−0</b></div></div>
+    </div>
+    <div id="rAi"></div>
+    <div class="tabs" role="tablist">
+      <button role="tab" aria-selected="true" data-p="pGhost">Evidence<em id="nGhost">0</em></button>
+      <button role="tab" aria-selected="false" data-p="pLife">Signs of life<em id="nLife">0</em></button>
+      <button role="tab" aria-selected="false" data-p="pJd">The post</button>
+    </div>
+    <div>
+      <div class="pane on" id="pGhost"></div>
+      <div class="pane" id="pLife"></div>
+      <div class="pane" id="pJd"><div class="jd" id="rJd"></div></div>
+    </div>
+    <div class="share"><button id="shareBtn"><svg class="i" viewBox="0 0 24 24"><path d="M12 3v12M7 8l5-5 5 5M5 14v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/></svg>Share case file</button><button id="againBtn"><svg class="i" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5"/></svg>New case</button></div>
+  </section>
+
+  <p class="foot">Made by <a href="https://github.com/Hiteshldt" target="_blank" rel="noopener">Hitesh Gupta</a>. Your job post is sent to the server for this one reading and never written to a log; readings are cached by a hash of the text. <button id="howBtn">How the haunting is measured</button></p>
+</main>
+
+<section class="stage" aria-label="A haunted office: a ghost above an empty chair">
+  <canvas id="c"></canvas>
+  <div class="hud tier" id="tierHud"><div><i id="tierDot"></i><span id="tierTxt"></span></div></div>
+  <div class="hud seance" id="seance"><span>Séance in progress</span><p id="seanceTxt">Lighting the candles…</p></div>
+  <div class="hud emf"><div><div class="meter"><div class="leds" id="leds"></div><div class="readout"><b id="emfVal">--</b><span>E.M.F.</span></div></div><div class="scale"><span>Alive</span><span>Haunted</span></div></div></div>
+  <div class="hint">move your cursor · the ghost is watching</div>
+  <div class="stage-tools" id="stageTools"></div>
+</section>
+
+<div class="modal" id="how" role="dialog" aria-modal="true" aria-labelledby="howT">
+  <div class="sheet">
+    <button class="close" data-close aria-label="Close"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    <h2 id="howT">How the haunting is measured</h2>
+    <h4>Two readings, blended</h4>
+    <p><b>The instruments</b> are free pattern checks that run instantly in your browser. They look for evergreen “talent pool” language, missing pay, mystery employers, Gmail recruiters, fresher roles that want six years, clichés, and posts older than a month. Real signs like a salary number, a named team, an interview process or a requisition ID pull the score down.</p>
+    <p style="margin-top:8px"><b>The medium</b> is a small AI model that reads the post like a tired recruiter would. It has to quote the post word for word for every claim, and any quote that isn't really in your text is thrown away before you see it.</p>
+    <h4>Honest limits</h4>
+    <ul>
+      <li>A high score means the post <i>reads</i> like a ghost. Only the company knows for sure.</li>
+      <li>Plenty of real jobs are badly written. If you have a referral, apply anyway.</li>
+      <li>“Asks you to pay” isn't a ghost, it's a scam. Never pay to apply.</li>
+    </ul>
+  </div>
+</div>
+<div id="toast"></div>
+<script type="module" src="./app.js"></script>
+</body>
+</html>
